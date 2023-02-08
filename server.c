@@ -1,20 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msimaozi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/08 10:20:23 by msimaozi          #+#    #+#             */
+/*   Updated: 2023/02/08 10:20:26 by msimaozi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <signal.h>
 #include "libft/libft.h"
 
-void	ft_msg(int signal)
+void	write_msg(int signal)
 {
 	static int	bit;
-	static int	i;
+	static int	x;
 
 	if (signal == SIGUSR1)
-		i += 1 << (7 - bit);
+		x += 1 << (7 - bit);
 	bit++;
 	if (bit == 8)
 	{
-		ft_putchar_fd(i, 1);
+		ft_putchar_fd(x, 1);
 		bit = 0;
-		i = 0;
+		x = 0;
 	}
 }
 
@@ -31,8 +42,8 @@ int	main(int argc, char **argv)
 		write(1, "\n", 1);
 		while (1)
 		{
-			signal(SIGUSR1, ft_msg);
-			signal(SIGUSR2, ft_msg);
+			signal(SIGUSR1, write_msg);
+			signal(SIGUSR2, write_msg);
 			pause();
 		}
 	}

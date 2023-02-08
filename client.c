@@ -1,29 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msimaozi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/08 10:20:02 by msimaozi          #+#    #+#             */
+/*   Updated: 2023/02/08 10:20:13 by msimaozi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include "libft/libft.h"
 
-static void	mt_kill(int pid, char *str)
+void	send_kill(int pid, char *str)
 {
-	int		i;
-	char	c;
+	int		x;
+	int		y;
 
-	while (*str)
+	y = 0;
+	while (str[y] != '\0')
 	{
-		i = 8;
-		c = *str++;
-		while (i--)
+		x = 7;
+		while (x >= 0)
 		{
-			if (c >> i & 1)
-				kill(pid, SIGUSR2);
-			else
+			if (str[y] >> x & 1)
 				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
 			usleep(100);
+			x--;
 		}
-	}
-	i = 8;
-	while (i--)
-	{
-		kill(pid, SIGUSR1);
-		usleep(100);
+		y++;
 	}
 }
 
@@ -34,10 +42,10 @@ int	main(int argc, char **argv)
 	if (argc == 3)
 	{
 		pid = ft_atoi(argv[1]);
-		ft_bin(pid, argv[2]);
-		ft_bin(pid, "\n");
+		send_kill(pid, argv[2]);
+		send_kill(pid, "\n");
 	}
 	else
-		ft_putstr_fd("Erro: Tenta ./client <Pid> <String>\n", 1);
+		ft_putstr_fd("Erro\n", 1);
 	return (0);
 }
